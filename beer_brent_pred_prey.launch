@@ -1,0 +1,43 @@
+<launch>
+
+	<node name="hunger_driver" pkg="p2_beer_brent" type="beer_brent_hunger_node" output="screen" />
+	<node name="wiimote_erratic" pkg="wiimote" type="wiimote_node.py" output="screen" />
+<!--Comment code in or out depending on pioneer or erratic base-->
+	<node name="erratic_player_driver" pkg="erratic_player" type="erratic_player"/>
+<!--
+
+	<node name="p2os_pioneer" pkg="p2os_driver" type="p2os">
+		<param name="port" value="/dev/ttyUSB0" type="string" />
+<- for maping of pioneer from pose to odom so i can get hunger levels:
+		<remap from="pose" to="odom"/>
+	</node>
+	
+-->
+	<node name="webcam" pkg="webcam_server" type="webcam_topic_server"/>
+	<node name="hokuyo_laser" pkg="hokuyo_node" type="hokuyo_node"/>
+	<node name="hunger_node" pkg="hunger" type="hunger.py"/>
+	<node name="cmvision" pkg="cmvision" type="cmvision" args="image:=webcam/image_raw" 
+		output="screen" >
+
+		<!-- Location of the cmvision color file -->
+		<param name="color_file" type="string" 
+			value="$(find p2_beer_brent)/colors.txt" />
+
+		<!-- Turn debug output on or off -->
+		<param name="debug_on" type="bool" value="true"/>
+
+		<!-- Turn color calibration on or off -->
+		<param name="color_cal_on" type="bool" value="false"/>
+
+		<!-- Enable Mean shift filtering -->
+		<param name="mean_shift_on" type="bool" value="false"/>
+
+		<!-- Spatial bandwidth: Bigger = smoother image -->
+		<param name="spatial_radius_pix" type="double" value="2.0"/>
+
+		<!-- Color bandwidth: Bigger = smoother image-->
+		<param name="color_radius_pix" type="double" value="40.0"/>
+	</node>
+
+</launch>
+

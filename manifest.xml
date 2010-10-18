@@ -1,0 +1,28 @@
+<package>
+  <description brief="p2_beer_brent">
+
+     p2_beer_brent
+
+     This package is intended to be used on either an erratic or pioneer base. The objective of this
+     lab is to demonstrate a reactive control architecture of a robot. During the exercise, the robot
+     is to wonder around randomly and avoid predators. Once its hunger level reaches a certain point
+     the robot will begin looking for food, all the while keeping a watchful eye for predators. This 
+     feeding behavior is to be repeated 3 times, at which time the demonstration will end.
+
+  </description>
+  <author>Thinkpad</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/p2_beer_brent</url>
+  <depend package="roscpp"/>
+  <depend package="rospy"/>
+	<depend package="joy"/>
+	<depend package="wiimote"/>
+  <depend package="cmvision"/>
+  <depend package="hokuyo_node"/>
+  <depend package="sensor_msgs"/>
+	<depend package="hunger"/>
+
+</package>
+
+
