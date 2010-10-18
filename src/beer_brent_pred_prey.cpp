@@ -139,7 +139,7 @@ void health_control(const std_msgs::Int8ConstPtr& msg)
 		ROS_INFO("Hunger Level: %d", msg->data);
 		behavior = HUNGRY;
 	}
-	else if (msg->data >= 50)
+	else if (msg->data >= 50 && behavior != HOG)
 	{
 		if(behavior== EAT)
 		{
