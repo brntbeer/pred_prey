@@ -48,7 +48,6 @@ ros::Publisher movementPub;
 ros::Publisher rumblePub; //used for bonus points on p1b
 ros::Publisher feedingPub;
 std_msgs::Bool feeding;
-geometry_msgs::Twist cmd;
 wiimote::RumbleControl rmbl;
 
 void wiimote_callback(const wiimote::StateConstPtr& msg);
@@ -104,27 +103,24 @@ void wiimote_callback(const wiimote::StateConstPtr& msg)
 	{ 
 		//deadman switch to start the robot
 		behavior = HOG;
-		cmd.linear.x = 0.0;
-		cmd.angular.z = 0.0;
 		if(msg->buttons[BUTTON_UP])
 		{ 
-			cmd.linear.x = linear_vel;
+			drive_straight(linear_vel);
 			//rmbl.rumble.switch_mode = 1;
 		}
 		if(msg->buttons[BUTTON_DOWN])
 		{
-			cmd.linear.x = -linear_vel;
+			drive_straight(-linear_vel);
 			//rmbl.rumble.switch_mode = 0;
 		}
 		if(msg->buttons[BUTTON_LEFT])
 		{
-			cmd.angular.z = angular_vel;
+			turn(angular_vel);
 		}
 		if(msg->buttons[BUTTON_RIGHT])
 		{
-			cmd.angular.z = -angular_vel;
+			turn(-angular_vel);
 		}
-		movementPub.publish(cmd);
 		//rumblePub.publish(rmbl);
 	}
 	if(msg->buttons[BUTTON_1])
@@ -246,13 +242,13 @@ void laser_scan(const sensor_msgs::LaserScanConstPtr& msg)
 				{
 					//turn left
 				  ROS_INFO("Turning Left");
-					cmd.angular.z = angular_vel;
+					turn(angular_vel);
 				}
 				if(i/3 >= 90)
 				{
 					//turn right
 					ROS_INFO("Turning Right");
-					turn(-angular_vel-0.2);
+					turn(-angular_vel);
 				}
 			}
 			//call obs avoidance.
@@ -327,11 +323,12 @@ void eat()
 	// (~25,000 for area)
 	//
 	//also stop the movement
-	cmd.linear.x = 0.0;
-	cmd.angular.z = 0.0;
+	geometry_msgs::Twist cmd_vel;
+	cmd_vel.linear.x = 0.0;
+	cmd_vel.angular.z = 0.0;
 	feeding.data = true;
 	feedingPub.publish(feeding);
-	movementPub.publish(cmd);
+	movementPub.publish(cmd_vel);
 	if(eat_counter >=3)
 	{
 		behavior = HOME;
@@ -351,12 +348,14 @@ void flee()
 }
 void turn(double angular)
 {
-	cmd.angular.z = angular;
-	movementPub.publish(cmd);
+	geometry_msgs::Twist cmd_vel;
+	cmd_vel.angular.z = angular;
+	movementPub.publish(cmd_vel);
 }
 void drive_straight(double linear)
 {
-	cmd.linear.x = linear;
+	geometry_msgs::Twist cmd_vel;
+	cmd_vel.linear.x = linear;
 	movementPub.publish(cmd);
 }
 bool line_up(int left, int right)
@@ -365,8 +364,7 @@ bool line_up(int left, int right)
 	{
 		//turn left
 		ROS_INFO("Turning left");
-		turn(angular_vel);
-		turn(angular_vel);
+		turn(angular_vel+angular_vel);
 		return false;
 	}
 	else if(left < 213 && right > 213	&& right < 427)
@@ -379,8 +377,7 @@ bool line_up(int left, int right)
 	{
 		//turn right
 		ROS_INFO("Turning Right");
-		turn(-angular_vel);
-		turn(-angular_vel);
+		turn(-angular_vel-angular_vel);
 		return false;
 	}
 	else if(left > 213 && left < 427 && right > 427)
@@ -401,12 +398,14 @@ bool line_up(int left, int right)
 }
 void look_for_food()
 {
-	//turn(1.0);
-	cmd.angular.z = angular_vel;
-	movementPub.publish(cmd);
+	turn(angular_vel);
+	drive_straight(linear_vel);
+	//cmd.angular.z = angular_vel;
+	//movementPub.publish(cmd);
 }
 void look_for_home()
 {
-	cmd.angular.z = angular_vel;
-	movementPub.publish(cmd);
+
+	turn(angular_vel);
+	drive_straight(linear_vel);
 }
