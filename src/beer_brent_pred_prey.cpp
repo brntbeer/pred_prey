@@ -224,7 +224,6 @@ void vision_processing(const cmvision::BlobsConstPtr& msg)
 		}
 	}
 }
-}
 void laser_scan(const sensor_msgs::LaserScanConstPtr& msg)
 {
 	//loop through the data points.
@@ -238,7 +237,7 @@ void laser_scan(const sensor_msgs::LaserScanConstPtr& msg)
 		{
 			if(msg->ranges[i] <= 0.8 && msg->ranges[i] > msg->range_min)
 			{
-				if(i/3 > 90)
+				if(i/3 < 90)
 				{
 					//turn left
 				  ROS_INFO("Turning Left");
@@ -261,11 +260,11 @@ void arbiter()
 {
 	if(behavior == AVOID)
 	{
-		obstacle_avoidance();
+	//	obstacle_avoidance();
 	}
 	if(behavior == HOME)
 	{
-		go_home();
+		//go_home();
 	}
 	if(behavior == FLEE)
 	{
@@ -356,7 +355,7 @@ void drive_straight(double linear)
 {
 	geometry_msgs::Twist cmd_vel;
 	cmd_vel.linear.x = linear;
-	movementPub.publish(cmd);
+	movementPub.publish(cmd_vel);
 }
 bool line_up(int left, int right)
 {
@@ -397,6 +396,8 @@ bool line_up(int left, int right)
 		return true;
 }
 void look_for_food()
+{	
+	int num =0;
 	srand((unsigned)time(NULL) );
 	num = (1+rand() % 3);
 	if(num == 1 || num == 2)
@@ -407,12 +408,12 @@ void look_for_food()
 	{
 	  drive_straight(linear_vel);
 	}
-{
 	//cmd.angular.z = angular_vel;
 	//movementPub.publish(cmd);
 }
 void look_for_home()
 {
+	int num =0;
 	srand((unsigned)time(NULL) );
 	num = (1+rand() % 3);
 	if(num == 1 || num == 2)
