@@ -397,15 +397,30 @@ bool line_up(int left, int right)
 		return true;
 }
 void look_for_food()
+	srand((unsigned)time(NULL) );
+	num = (1+rand() % 3);
+	if(num == 1 || num == 2)
+	{
+	  turn(angular_vel);
+	}
+	else if(num == 3)
+	{
+	  drive_straight(linear_vel);
+	}
 {
-	turn(angular_vel);
-	drive_straight(linear_vel);
 	//cmd.angular.z = angular_vel;
 	//movementPub.publish(cmd);
 }
 void look_for_home()
 {
-
-	turn(angular_vel);
-	drive_straight(linear_vel);
+	srand((unsigned)time(NULL) );
+	num = (1+rand() % 3);
+	if(num == 1 || num == 2)
+	{
+	  turn(angular_vel);
+	}
+	else if(num == 3)
+	{
+	  drive_straight(linear_vel);
+	}
 }
