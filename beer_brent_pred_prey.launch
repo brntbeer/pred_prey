@@ -3,14 +3,14 @@
 	<node name="hunger_driver" pkg="p2_beer_brent" type="beer_brent_hunger_node" output="screen" />
 	<node name="wiimote_erratic" pkg="wiimote" type="wiimote_node.py" output="screen" />
 <!--Comment code in or out depending on pioneer or erratic base-->
-<!--
 	<node name="erratic_player_driver" pkg="erratic_player" type="erratic_player"/>
--->
+<!--
 	<node name="p2os_pioneer" pkg="p2os_driver" type="p2os">
 		<param name="port" value="/dev/ttyUSB0" type="string" />
 		<remap from="pose" to="odom"/>
 	</node>
 	
+-->
 	<node name="webcam" pkg="webcam_server" type="webcam_topic_server"/>
 	<node name="hokuyo_laser" pkg="hokuyo_node" type="hokuyo_node"/>
 	<node name="hunger_node" pkg="hunger" type="hunger.py"/>
@@ -22,7 +22,7 @@
 			value="$(find p2_beer_brent)/colors.txt" />
 
 		<!-- Turn debug output on or off -->
-		<param name="debug_on" type="bool" value="true"/>
+		<param name="debug_on" type="bool" value="false"/>
 
 		<!-- Turn color calibration on or off -->
 		<param name="color_cal_on" type="bool" value="false"/>

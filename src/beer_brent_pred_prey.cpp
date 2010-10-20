@@ -90,7 +90,8 @@ int main(int argc, char **argv)
 		ros::spinOnce();
 		arbiter();
 
-		ROS_INFO("Behavior: %d", behavior);
+		//ROS_INFO("Behavior: %d", behavior);
+
 		loop_rate.sleep();
 	}
 	return 0;
@@ -200,7 +201,7 @@ void vision_processing(const cmvision::BlobsConstPtr& msg)
 
 					ROS_INFO("lined up");
 					//blobs all up in this bitch.
-					if(msg->blobs[i].area > 25000 || msg->blobs[i].top > 400)
+					if(msg->blobs[i].area > 25000 )
 					{
 						behavior = EAT;
 						ROS_INFO("Eating");
@@ -295,17 +296,17 @@ void roam()
 	//array of forward left right commands to randomly choose 
 	//which to do and then move forward for a fixed distance.
 	srand((unsigned)time(NULL) );
-	num = (1+rand() % 6);
+	num = (1+rand() % 3);
 	if(num == 1) //forward
 	{
 		drive_straight(linear_vel);
 	}
-	if(num == 2 || num == 4) //left
+	if(num == 2) //left
 	{
 		turn(angular_vel);
 		//drive_straight(linear_vel);
 	}
-	if(num == 3 || num == 5) //right
+	if(num == 3) //right
 	{
 		turn(-angular_vel);
 		//drive_straight(linear_vel);
@@ -342,7 +343,7 @@ void flee()
 {
 	ROS_INFO("FLEEEEEEEEEEEEEE\n");
 	drive_straight(-linear_vel);
-	turn(-angular_vel+0.2);
+	turn(-angular_vel-0.2);
 	behavior = ROAM;
 }
 void turn(double angular)
@@ -391,6 +392,12 @@ bool line_up(int left, int right)
 		ROS_INFO("Moving Forward");
 		drive_straight(linear_vel);
 		return false;
+	}
+	else if(left <= 213 && right >= 427)
+	{
+		ROS_INFO("Moving forward little");
+		//drive_straight(linear_vel*linear_vel);
+		return true;
 	}
 	else
 		return true;
