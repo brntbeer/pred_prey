@@ -8,7 +8,7 @@ Setup
 -----
 Make sure you have the latest cturtle install of ROS. This also means
 it is debian based only. ROS has not been fully setup for other systems.
-For more information on ROS, visit: <http://ros.org >
+For more information on ROS, visit: <http://ros.org />
 
 To Do
 -----
