@@ -90,7 +90,7 @@ int main(int argc, char **argv)
 		ros::spinOnce();
 		arbiter();
 
-		//ROS_INFO("Behavior: %d", behavior);
+		ROS_INFO("Behavior: %d", behavior);
 
 		loop_rate.sleep();
 	}

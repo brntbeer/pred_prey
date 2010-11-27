@@ -10,7 +10,7 @@
      feeding behavior is to be repeated 3 times, at which time the demonstration will end.
 
   </description>
-  <author>Thinkpad</author>
+  <author>Brent Beer</author>
   <license>BSD</license>
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/p2_beer_brent</url>
